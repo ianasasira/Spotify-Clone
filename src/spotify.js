@@ -11,7 +11,7 @@ const clientId = "ae22bd10c36a4a14b7022bc6111fd293";
 
 //
 //  the scopes you need in the app
-const SCOPES = [
+const scopes = [
   'user-read-private',
   'user-read-email',
   'user-library-read',
@@ -27,5 +27,14 @@ const SCOPES = [
   'user-follow-modify'
 
 ]
-// so now we are making one big url
-export const loginUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri} `
+export const getTokenFromUrl =()=>{
+    return window.location.hash.substring(1).split('&').reduce((initial,item)=>{
+        //#accessToken=myasdvdsf21s&
+        let parts = item.split('=');
+        initial[parts[0]]=decodeURIComponent(parts[1]);
+
+        return initial;
+    },{})
+}
+// so now we are making one big url and this special technic is called string interpolatiion
+export const loginUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&{scopes.join("%20")}&response_type=token&show_dialog=true`;
